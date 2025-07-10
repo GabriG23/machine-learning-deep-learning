@@ -35,7 +35,7 @@ def train_and_compare(x_train, x_test, y_train, y_test):
         model.fit(x_train, y_train)
         y_pred = model.predict(x_test)
 
-        if hasattr(model, "predict_proba"):
+        if hasattr(model, "predict_proba"): # controllo l'attributo
             y_proba = model.predict_proba(x_test)[:, 1]
         else:
             y_proba = model.decision_function(x_test)

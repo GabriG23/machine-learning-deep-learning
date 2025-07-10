@@ -13,21 +13,18 @@ from sklearn.datasets import fetch_california_housing
 
 def load_data():    # prendo i dati del california housing
     data = fetch_california_housing()
-    X = data.data[:, [0]]  # MedInc (reddito mediano)
+    x = data.data[:, [0]]  # MedInc (reddito mediano)
     y = data.target        # Prezzo medio casa
-    return X, y
-
-def feature_engineering(): # i risultati non mi piacciono, proviamo a fare del feature engineering
-    return
+    return x, y
 
 def polynomial_regression_demo(degrees=[1, 3, 10]):
-    X, y = load_data()
-    X = X[:5000]
+    x, y = load_data()
+    x = x[:5000]
     y = y[:5000]
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
-    x_range = np.linspace(X.min(), X.max(), 500).reshape(-1, 1)
+    x_range = np.linspace(x.min(), x.max(), 500).reshape(-1, 1) # Return evenly spaced numbers over a specified interval.
 
     plt.figure(figsize=(18, 4))
 
@@ -37,17 +34,17 @@ def polynomial_regression_demo(degrees=[1, 3, 10]):
             PolynomialFeatures(degree=deg),
             LinearRegression()
         )
-        model.fit(X_train, y_train)
+        model.fit(x_train, y_train)
 
-        y_train_pred = model.predict(X_train)
-        y_test_pred = model.predict(X_test)
+        y_train_pred = model.predict(x_train)
+        y_test_pred = model.predict(x_test)
         y_plot = model.predict(x_range)
 
         train_mse = mean_squared_error(y_train, y_train_pred)
         test_mse = mean_squared_error(y_test, y_test_pred)
 
         plt.subplot(1, len(degrees), i)
-        plt.scatter(X_train, y_train, color='lightgray', alpha=0.5, label="Train data")
+        plt.scatter(x_train, y_train, color='lightgray', alpha=0.5, label="Train data")
         plt.plot(x_range, y_plot, color='red', label=f"Model (deg={deg})")
         plt.title(f"Degree {deg}\nTrain MSE: {train_mse:.2f}, Test MSE: {test_mse:.2f}")
         plt.xlabel("MedInc (scaled)")

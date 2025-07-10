@@ -33,17 +33,14 @@ def baseline_model(df):
 def feature_engineered_model(df):
     df = df.copy()                                              # copio il df
 
-    # Nuova feature: interazione reddito × occupazione
     df["Inc_Occ_Interaction"] = df["MedInc"] * df["AveOccup"]   # creo una nuova feature
 
-    # Trasformazione logaritmica della popolazione
     df["LogPopulation"] = np.log1p(df["Population"])            # trasformazione logaritmica della popolazione
 
-    # Binning della densità media di occupazione
     df["OccupancyLevel"] = pd.cut(df["AveOccup"], bins=[0, 2, 5, 15, np.inf], labels=[0, 1, 2, 3])
+    # raggruppa diversi intervalli numerici in bin o bucket
 
-    # Encode la feature categoriale
-    df = pd.get_dummies(df, columns=["OccupancyLevel"], drop_first=True)
+    df = pd.get_dummies(df, columns=["OccupancyLevel"], drop_first=True) # faccio encode delle feature (vengono trasformate in numero)
 
     X = df.drop(columns='target')
     y = df['target']
